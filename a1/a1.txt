@@ -1,0 +1,87 @@
+Part I. Creating binary files with cs241.wordasm
+
+We have provided the tool cs241.wordasm that may be used to create a file whose binary content is specified using hexadecimal notation. cs241.wordasm reads the hexadecimal representation of several 32-bit words on standard input. On standard output, it outputs a file containing, for each of the input words, the four bytes containing the 32 bits represented by the word (8 bits per byte). On each line of input, any characters after a semicolon (;) are assumed to be comments and ignored. Example:
+% cat > input
+.word 0x43533234  ; C(43) S(53) 2(32) 4(34)
+.word 0x3120726f  ; 1(31) space(20) r(72) o(6f)
+.word 0x636b730a  ; c(63) k(6b) s(73) newline(0a)
+% java cs241.wordasm < input
+CS241 rocks
+% java cs241.wordasm < input > output
+% xxd < output
+0000000: 4353 3234 3120 726f 636b 730a            CS241 rocks.
+Note that the xxd Unix command shows the contents of the file both as hexadecimal numbers and as ASCII characters.
+Problem 1 — 8 marks of 46 (filename: helloworld.hex)
+
+Write a hexadecimal representation (using the .word notation) of a file with contents:
+Hello
+from Unix
+You may find it useful to use the UNIX command man ascii to get an ASCII code chart. Before submitting to Marmoset, run the cs241.wordasm tool with your solution as standard input to check that your output is correct.
+
+Part II. MIPS Machine Language Programming
+
+The mips.twoints tool loads a MIPS machine language program from a file into memory starting at location 0. It then reads two integers, stores them into registers 1 and 2, runs your program, and, when your program returns to the instruction whose address is stored in register 31, prints the values of all the registers and exits. Run this tool using the command java mips.twoints mycode.mips, replacing mycode.mips with the name of a file containing your machine code.
+Since MIPS machine language is encoded in binary, not text, you cannot create it directly using an editor like vim. You must specify your machine language program in hexadecimal and use cs241.wordasm to translate it to (binary) machine language.
+
+For each of the following problems, create the hexadecimal representation of a MIPS machine language program that solves the problem. Test your program using cs241.wordasm and mips.twoints as follows:
+
+% vim mycode.hex
+% java cs241.wordasm < mycode.hex > mycode.mips
+% java mips.twoints mycode.mips
+Enter value for register 1: 1
+Enter value for register 2: 2
+Running MIPS program.
+...
+Each problem specifies a filename for the file that you will submit. You must use the specified filename for the testing scripts to work correctly.
+
+Scratch registers used to hold temporary results may be used and do not need to be set back to 0.
+
+Problem 2 — 8 marks of 46 (filename: a1p2.hex)
+
+Write the hexadecimal notation for a MIPS machine language program that returns to the address saved in register 31. This is the only thing your program should do.
+Example of running the program:
+
+Enter value for register 1: 1
+Enter value for register 2: 2
+Running MIPS program.
+MIPS program completed normally.
+...
+
+Problem 3 — 8 marks of 46 (filename: a1p3.hex)
+
+Write the hexadecimal notation for a MIPS machine language program that copies the value in register 1 to register 3, then adds the values in register 1 and 3 placing the result in register 4 and then returns.
+Example of running the program:
+
+Enter value for register 1: 2
+Enter value for register 2: 3
+Running MIPS program.
+MIPS program completed normally.
+$01 = 0x00000002   $02 = 0x00000003   $03 = 0x00000002   $04 = 0x00000004   
+...
+
+Problem 4 — 8 marks of 46 (filename: a1p4.hex)
+
+Write the hexadecimal notation for a MIPS machine language program that determines the maximum of the values in registers 1 and 2 interpreted as two's complement integers, places it in register 3, and returns.
+Example of running the program:
+
+Enter value for register 1: 3
+Enter value for register 2: 5
+Running MIPS program.
+MIPS program completed normally.
+$01 = 0x00000003   $02 = 0x00000005   $03 = 0x00000005   $04 = 0x00000001   
+...
+
+Problem 5 — 7 marks of 46 (filename: a1p5.hex)
+
+Write the hexadecimal notation for a MIPS machine language program that adds 1 to the value in register 1 placing the result in register 3 and then returns.
+Example of running the program:
+
+Enter value for register 1: 2
+Enter value for register 2: 5
+Running MIPS program.
+MIPS program completed normally.
+$01 = 0x00000002   $02 = 0x00000005   $03 = 0x00000003 ...
+
+Problem 6 — 7 marks of 46 (filename: a1p6.hex)
+
+Write the hexadecimal notation for a MIPS machine language program that interprets the value in register 1 as the address of a word in memory, and places the address of the following word in memory in register 3 and then returns.
